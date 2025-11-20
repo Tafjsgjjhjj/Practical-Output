@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Click Speed Game</title>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Logo in the center */
+  #logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.1;
+    width: 200px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Buttons and stats above the logo */
+  #clickBtn, #restartBtn, .stats, h1 {
+    position: relative;
+    z-index: 1;
+  }
+
+  #clickBtn {
+    position: absolute;
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: green;
+    color: #fff;
+    cursor: pointer;
+  }
+  #restartBtn {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: green;
+    color: #fff;
+    cursor: pointer;
+  }
+  .stats {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  /* Footer credit */
+  footer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 14px;
+    color: #aaa;
+    z-index: 1;
+  }
+
+  .btn-box{
+    display:flex;
+    gap:300px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Logo (replace your-logo.png with your file) -->
+
+
+
+
+<h1>Countdown Time click Game</h1>
+<button id="clickBtn">Click Me!</button>
+<div class="stats">CountDownTime: <span id="timer">10</span>s</div>
+<div class="stats">Clicks: <span id="clickCount">0</span></div>
+
+<div class="btn-box">
+  <button id="restartBtn">Restart Game</button>
+   <form action="calculator.html">
+      <button class="btn" type="submit" id="restartBtn">Next</button>
+      </form>
+    </div>
+
+  
+<footer>Ranido, Ampo, Teoxon</footer>
+
+<script>
+  const clickBtn = document.getElementById('clickBtn');
+  const timerEl = document.getElementById('timer');
+  const clickCountEl = document.getElementById('clickCount');
+  const restartBtn = document.getElementById('restartBtn');
+
+  let timeLeft = 10;
+  let clicks = 0;
+  let timerInterval;
+  let gameStarted = false;
+
+  function getRandomPosition(){
+    const btnWidth = clickBtn.offsetWidth;
+    const btnHeight = clickBtn.offsetHeight;
+    const maxX = window.innerWidth - btnWidth;
+    const maxY = window.innerHeight - btnHeight;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    return {x, y};
+  }
+
+  function moveButton(){
+    const pos = getRandomPosition();
+    clickBtn.style.left = pos.x + 'px';
+    clickBtn.style.top = pos.y + 'px';
+  }
+
+  function startGame(){
+    if(gameStarted) return;
+    gameStarted = true;
+    clicks = 0;
+    clickCountEl.textContent = clicks;
+    timeLeft = 10;
+    timerEl.textContent = timeLeft;
+
+    timerInterval = setInterval(()=>{
+      timeLeft--;
+      timerEl.textContent = timeLeft;
+      if(timeLeft <= 0){
+        clearInterval(timerInterval);
+        gameStarted = false;
+        alert('Time is up! You clicked ' + clicks + ' times.');
+      }
+    },1000);
+  }
+
+  clickBtn.addEventListener('click', ()=>{
+    if(!gameStarted) startGame();
+    if(timeLeft > 0){
+      clicks++;
+      clickCountEl.textContent = clicks;
+      moveButton();
+    }
+  });
+
+  restartBtn.addEventListener('click', ()=>{
+    clearInterval(timerInterval);
+    gameStarted = false;
+    timeLeft = 10;
+    clicks = 0;
+    timerEl.textContent = timeLeft;
+    clickCountEl.textContent = clicks;
+    moveButton();
+  });
+
+  moveButton();
+</script>
+
+</body>
+
+</html>
